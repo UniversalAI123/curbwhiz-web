@@ -1,0 +1,815 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!--
+      CurbWhiz landing page. Self-contained: its own <style>, one small inline script (hash-pinned
+      in the policy below), fonts and images from this folder. No third-party requests.
+      Every figure on this page comes from the app's two worked examples (synthetic numbers) and is
+      labelled as such. Prices and free-tier wording mirror support.html and the App Store listing:
+      edit them together.
+    -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'sha256-GGlhl+CBUuMHrTE2oq5E/I7PR1daJO44IWOu/AMe91k='; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#05070a" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>CurbWhiz — Know your max bid before you bid</title>
+    <meta name="description" content="CurbWhiz works out the most you can pay for a used car — buyer fees, repairs, transport and your profit target counted — and never treats a missing cost as $0. For car flippers and used-car buyers." />
+    <link rel="canonical" href="https://universalai123.github.io/curbwhiz-web/welcome/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="CurbWhiz" />
+    <meta property="og:title" content="CurbWhiz — Know your max bid before you bid" />
+    <meta property="og:description" content="The most you can pay for a used car, with fees, repairs and your profit target counted. Unknown costs never become $0." />
+    <meta property="og:url" content="https://universalai123.github.io/curbwhiz-web/welcome/" />
+    <meta property="og:image" content="https://universalai123.github.io/curbwhiz-web/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='8'%20fill='%230D0E10'/%3E%3Cpath%20d='M8%2023.08A9.23%209.23%200%201%201%2024%2023.08'%20fill='none'%20stroke='%23F1EFEA'%20stroke-opacity='.45'%20stroke-width='2'%20stroke-linecap='round'/%3E%3Cpath%20d='M8%2023.08A9.23%209.23%200%200%201%2021.93%2011.39'%20fill='none'%20stroke='%235CE1F2'%20stroke-width='2.4'%20stroke-linecap='round'/%3E%3Cpath%20d='M16%2018.46L20.43%2013.18'%20stroke='%23F1EFEA'%20stroke-width='2.4'%20stroke-linecap='round'/%3E%3Ccircle%20cx='16'%20cy='18.46'%20r='2.1'%20fill='%23F1EFEA'/%3E%3C/svg%3E" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../icons/favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../icons/apple-touch-icon.png" />
+    <link rel="preload" href="fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <style>
+      @font-face { font-family: 'Geist'; font-style: normal; font-weight: 100 900; font-display: swap; src: url(fonts/geist-latin.woff2) format('woff2'); }
+      @font-face { font-family: 'Geist Mono'; font-style: normal; font-weight: 100 900; font-display: swap; src: url(fonts/geist-mono-latin.woff2) format('woff2'); }
+
+      /* "Aurora" night tokens, copied from the app (src/ui/styles/tokens.css, dark block). */
+      :root {
+        color-scheme: dark;
+        --bg: #05070a;
+        --surface: #0a0e14;
+        --surface-2: #0e131a;
+        --line: rgba(255, 255, 255, 0.08);
+        --line-strong: rgba(255, 255, 255, 0.14);
+        --text: #edf2f7;
+        --muted: #a9b4c4;
+        --subtle: #8693a8;
+        --ice: #5ce1f2;
+        --sky: #38bdf8;
+        --violet: #8b7cf6;
+        --grad: linear-gradient(135deg, #5ce1f2 0%, #38bdf8 50%, #8b7cf6 100%);
+        --grad-soft: linear-gradient(135deg, rgba(92, 225, 242, 0.16), rgba(139, 124, 246, 0.16));
+        --amber: #f5b944;
+        --rose: #ff7a90;
+        --green: #5fe3a1;
+        --sans: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        --mono: 'Geist Mono', ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+        --wrap: 1200px;
+        --pad: clamp(20px, 4vw, 40px);
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      *, *::before, *::after { box-sizing: border-box; }
+      html { background: var(--bg); scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: 88px; }
+      body { margin: 0; font-family: var(--sans); font-size: 17px; line-height: 1.6; color: var(--text); background: var(--bg); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; overflow-x: hidden; }
+      img, svg { display: block; max-width: 100%; }
+      a { color: inherit; text-decoration: none; }
+      h1, h2, h3, p, ul, ol, figure { margin: 0; }
+      ul, ol { padding: 0; list-style: none; }
+      :focus-visible { outline: 2px solid var(--ice); outline-offset: 3px; border-radius: 6px; }
+      ::selection { background: rgba(92, 225, 242, 0.3); }
+
+      .wrap { width: 100%; max-width: calc(var(--wrap) + 2 * var(--pad)); margin: 0 auto; padding: 0 var(--pad); }
+      .skip { position: absolute; left: 16px; top: -60px; z-index: 100; background: var(--text); color: var(--bg); padding: 10px 16px; border-radius: 10px; font-weight: 600; }
+      .skip:focus { top: 12px; }
+      .grad-text { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .mono { font-family: var(--mono); }
+      .eyebrow { display: inline-flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ice); }
+      .eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--ice); opacity: 0.7; }
+
+      /* ---------- ground ---------- */
+      .ground { position: absolute; inset: 0 0 auto 0; height: 1100px; pointer-events: none; z-index: 0; overflow: hidden; }
+      .ground::before { content: ''; position: absolute; inset: 0; background:
+          radial-gradient(60% 46% at 78% 18%, rgba(92, 225, 242, 0.17), transparent 70%),
+          radial-gradient(48% 42% at 96% 52%, rgba(139, 124, 246, 0.2), transparent 70%),
+          radial-gradient(40% 36% at 8% 6%, rgba(56, 189, 248, 0.1), transparent 70%); }
+      .ground::after { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px); background-size: 56px 56px; -webkit-mask-image: radial-gradient(70% 60% at 60% 30%, #000 0%, transparent 78%); mask-image: radial-gradient(70% 60% at 60% 30%, #000 0%, transparent 78%); }
+
+      /* ---------- nav ---------- */
+      .nav { position: sticky; top: 0; z-index: 50; transition: background 0.3s, border-color 0.3s, backdrop-filter 0.3s; border-bottom: 1px solid transparent; }
+      .nav.is-stuck { background: rgba(5, 7, 10, 0.72); -webkit-backdrop-filter: saturate(160%) blur(18px); backdrop-filter: saturate(160%) blur(18px); border-bottom-color: var(--line); }
+      .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 72px; gap: 20px; }
+      .brand { display: inline-flex; align-items: center; gap: 11px; font-weight: 650; font-size: 19px; letter-spacing: -0.02em; min-height: 44px; }
+      .brand svg { width: 34px; height: 34px; border-radius: 9px; box-shadow: 0 0 0 1px var(--line-strong), 0 8px 22px -8px rgba(92, 225, 242, 0.5); }
+      .brand b { font-weight: 650; }
+      .nav-links { display: flex; align-items: center; gap: 6px; }
+      .nav-links a { padding: 10px 14px; border-radius: 10px; font-size: 15px; color: var(--muted); transition: color 0.2s, background 0.2s; }
+      .nav-links a:hover { color: var(--text); background: rgba(255, 255, 255, 0.05); }
+
+      /* ---------- buttons ---------- */
+      .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 24px; border-radius: 14px; font-weight: 600; font-size: 16px; letter-spacing: -0.01em; transition: transform 0.25s var(--ease), box-shadow 0.25s, background 0.25s, border-color 0.25s; white-space: nowrap; }
+      .btn svg { width: 18px; height: 18px; transition: transform 0.25s var(--ease); }
+      .btn:hover svg.arrow { transform: translateX(3px); }
+      .btn-primary { background: var(--grad); color: #04121a; box-shadow: 0 16px 44px -14px rgba(92, 225, 242, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.45); }
+      .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 22px 56px -14px rgba(92, 225, 242, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.45); }
+      .btn-ghost { border: 1px solid var(--line-strong); background: rgba(255, 255, 255, 0.03); color: var(--text); }
+      .btn-ghost:hover { background: rgba(255, 255, 255, 0.07); border-color: rgba(255, 255, 255, 0.24); transform: translateY(-2px); }
+      .btn-sm { min-height: 44px; padding: 0 18px; font-size: 15px; border-radius: 12px; }
+      .store { display: inline-flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 20px 0 16px; border-radius: 14px; border: 1px solid var(--line-strong); background: rgba(255, 255, 255, 0.03); }
+      .store svg { width: 24px; height: 24px; }
+      .store span { display: block; line-height: 1.15; }
+      .store small { display: block; font-size: 11px; color: var(--subtle); letter-spacing: 0.02em; }
+      .store b { font-weight: 600; font-size: 16px; }
+
+      /* ---------- hero ---------- */
+      .hero { position: relative; z-index: 1; padding: clamp(36px, 6vw, 84px) 0 clamp(56px, 8vw, 110px); }
+      .hero .wrap { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr); gap: clamp(24px, 5vw, 72px); align-items: center; }
+      .hero h1 { margin-top: 22px; font-size: clamp(44px, 6.3vw, 86px); line-height: 0.98; letter-spacing: -0.045em; font-weight: 650; text-wrap: balance; }
+      .hero .lede { margin-top: 26px; max-width: 34em; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.55; color: var(--muted); }
+      .hero .lede strong { color: var(--text); font-weight: 550; }
+      .cta-row { margin-top: 34px; display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+      .ticks { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 10px 22px; font-size: 14.5px; color: var(--muted); }
+      .ticks li { display: inline-flex; align-items: center; gap: 8px; }
+      .ticks svg { width: 16px; height: 16px; color: var(--ice); flex: none; }
+
+      .stage { position: relative; display: grid; place-items: center; padding: 6px 0 46px; }
+      .dial { position: absolute; width: min(600px, 118%); aspect-ratio: 1; left: 50%; top: 47%; transform: translate(-50%, -50%); opacity: 0.9; }
+      .dial .track { stroke: rgba(255, 255, 255, 0.07); }
+      .dial .sweep { stroke-dasharray: 707; stroke-dashoffset: 707; animation: sweep 1.8s var(--ease) 0.25s forwards; filter: drop-shadow(0 0 18px rgba(92, 225, 242, 0.45)); }
+      .dial .tick { stroke: rgba(255, 255, 255, 0.16); }
+      @keyframes sweep { to { stroke-dashoffset: 262; } }
+
+      .phone { position: relative; width: min(300px, 74vw); aspect-ratio: 1320 / 2868; padding: 9px; border-radius: 50px; background: linear-gradient(160deg, #2a323e, #0c1016 38%, #1a2029); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 50px 110px -30px rgba(0, 0, 0, 0.9), 0 30px 90px -30px rgba(92, 225, 242, 0.35); }
+      .phone img { width: 100%; height: 100%; object-fit: cover; border-radius: 42px; background: #05070a; }
+      .phone::before { content: ''; position: absolute; top: 20px; left: 50%; width: 30%; height: 3.3%; transform: translateX(-50%); background: #000; border-radius: 99px; z-index: 2; }
+      .phone::after { content: ''; position: absolute; inset: 9px; border-radius: 42px; background: linear-gradient(140deg, rgba(255, 255, 255, 0.1), transparent 28%); pointer-events: none; }
+      .stage .phone { animation: float 7s ease-in-out infinite; }
+      @keyframes float { 0%, 100% { transform: translateY(0) rotate(-1.2deg); } 50% { transform: translateY(-12px) rotate(-0.4deg); } }
+
+      .readout { position: absolute; z-index: 3; padding: 14px 18px 15px; border-radius: 18px; background: linear-gradient(180deg, rgba(20, 27, 37, 0.86), rgba(10, 14, 20, 0.86)); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border: 1px solid var(--line-strong); box-shadow: 0 24px 60px -22px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.07); }
+      .readout .k { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--subtle); }
+      .readout .v { margin-top: 2px; font-size: 34px; font-weight: 650; letter-spacing: -0.04em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+      .readout .v sup { font-size: 0.5em; vertical-align: 0.62em; margin-right: 1px; font-weight: 500; }
+      .readout .n { margin-top: 3px; font-size: 12.5px; color: var(--rose); display: flex; align-items: center; gap: 6px; }
+      .readout.r1 { left: -4%; top: 17%; animation: bob 6s ease-in-out 0.4s infinite; }
+      .readout.r1 .v { color: var(--ice); text-shadow: 0 0 28px rgba(92, 225, 242, 0.35); }
+      .readout.r2 { right: -3%; bottom: 20%; animation: bob 6.5s ease-in-out 1.2s infinite; }
+      @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+      .stage-note { position: absolute; bottom: 0; left: 0; right: 0; text-align: center; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--subtle); }
+
+      /* ---------- principle strip ---------- */
+      .strip { position: relative; z-index: 1; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0)); }
+      .strip ul { display: grid; grid-template-columns: repeat(4, 1fr); }
+      .strip li { padding: 26px 24px; border-left: 1px solid var(--line); }
+      .strip li:first-child { border-left: 0; padding-left: 0; }
+      .strip b { display: block; font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
+      .strip span { display: block; margin-top: 2px; font-size: 14.5px; color: var(--subtle); }
+
+      /* ---------- sections ---------- */
+      section { position: relative; z-index: 1; }
+      .sec { padding: clamp(72px, 10vw, 136px) 0 0; }
+      .sec-head { max-width: 780px; }
+      .sec-head h2 { margin-top: 18px; font-size: clamp(34px, 4.6vw, 60px); line-height: 1.02; letter-spacing: -0.04em; font-weight: 650; text-wrap: balance; }
+      .sec-head p { margin-top: 20px; font-size: clamp(17px, 1.4vw, 19px); color: var(--muted); max-width: 36em; }
+
+      .card { position: relative; border-radius: 26px; border: 1px solid var(--line); background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0) 55%), var(--surface); overflow: hidden; transition: transform 0.4s var(--ease), border-color 0.3s, box-shadow 0.4s; }
+      .card:hover { transform: translateY(-4px); border-color: rgba(92, 225, 242, 0.28); box-shadow: 0 30px 70px -34px rgba(92, 225, 242, 0.35); }
+      .card h3 { font-size: 22px; line-height: 1.2; letter-spacing: -0.025em; font-weight: 620; }
+      .card p { margin-top: 10px; font-size: 15.5px; line-height: 1.55; color: var(--muted); }
+      .tag { display: inline-flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--subtle); }
+      .tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--amber); }
+
+      /* bento */
+      .bento { margin-top: clamp(36px, 5vw, 60px); display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 18px; }
+      .bento .card { padding: 30px; display: flex; flex-direction: column; }
+      .b-wide { grid-column: span 4; }
+      .b-tall { grid-column: span 2; }
+      .b-half { grid-column: span 3; }
+      .b-third { grid-column: span 2; }
+      .viz { margin-top: auto; padding-top: 28px; }
+
+      /* ladder (max bid) */
+      .ladder { position: relative; height: 150px; border-radius: 16px; background: #070a0f; border: 1px solid var(--line); overflow: hidden; }
+      .ladder .grid { position: absolute; inset: 0 0 34px 0; background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px); background-size: 12.5% 100%; }
+      .ladder .bar { position: absolute; top: 62px; height: 12px; border-radius: 4px; }
+      .ladder .costs { left: 25%; width: 45.6%; background: #56627a; }
+      .ladder .margin { left: 70.6%; width: 16.9%; background: var(--ice); box-shadow: 0 0 18px rgba(92, 225, 242, 0.5); }
+      .ladder .pin { position: absolute; top: 14px; bottom: 34px; width: 2px; }
+      .ladder .pin i { position: absolute; top: 0; left: 8px; font: 500 10.5px/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; font-style: normal; }
+      .ladder .p-max { left: 24.4%; background: var(--ice); box-shadow: 0 0 14px var(--ice); }
+      .ladder .p-max i { color: var(--ice); left: auto; right: 8px; }
+      .ladder .p-bid { left: 25%; top: 36px; background: rgba(255, 255, 255, 0.7); }
+      .ladder .p-bid i { color: var(--muted); top: 2px; }
+      .ladder .p-res { left: 87.5%; background: rgba(255, 255, 255, 0.4); }
+      .ladder .p-res i { color: var(--subtle); left: auto; right: 8px; }
+      .ladder .axis { position: absolute; left: 0; right: 0; bottom: 0; height: 34px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; padding: 0 12px; font: 400 11px/1 var(--mono); color: var(--subtle); }
+      .figs { display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 8px 40px; margin-top: 22px; }
+      .fig .k { font: 500 10.5px/1.2 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--subtle); }
+      .fig .v { margin-top: 4px; font-size: 30px; font-weight: 650; letter-spacing: -0.035em; font-variant-numeric: tabular-nums; line-height: 1.1; }
+      .fig .v.ice { color: var(--ice); }
+
+      /* unknown rows */
+      .rows { border-radius: 16px; background: #070a0f; border: 1px solid var(--line); padding: 6px 16px; }
+      .rows li { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 14.5px; color: var(--muted); }
+      .rows li:last-child { border-bottom: 0; }
+      .pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 99px; font: 500 11px/1.3 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; }
+      .pill.unk { color: var(--amber); background: rgba(245, 185, 68, 0.12); border: 1px solid rgba(245, 185, 68, 0.3); }
+      .pill.ok { color: var(--text); background: rgba(255, 255, 255, 0.06); border: 1px solid var(--line); text-transform: none; letter-spacing: 0; font-family: var(--sans); font-size: 13.5px; font-variant-numeric: tabular-nums; }
+      .noread { margin-top: 14px; display: flex; align-items: center; justify-content: space-between; font: 500 11px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--subtle); }
+      .noread b { color: var(--amber); font-weight: 500; }
+
+      /* downside */
+      .cases li { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) 64px; align-items: center; gap: 14px; padding: 9px 0; font-size: 14.5px; color: var(--muted); }
+      .cases .track { height: 10px; border-radius: 3px; background: rgba(255, 255, 255, 0.05); position: relative; }
+      .cases .track i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; background: var(--ice); transform-origin: left; }
+      .cases .loss .track i { background: var(--rose); }
+      .cases .amt { text-align: right; font-family: var(--mono); font-size: 13.5px; color: var(--text); font-variant-numeric: tabular-nums; }
+      .cases .loss .amt { color: var(--rose); }
+
+      /* steps (fee brackets) */
+      .steps-viz { display: flex; align-items: flex-end; gap: 6px; height: 96px; }
+      .steps-viz i { flex: 1; border-radius: 5px 5px 0 0; background: linear-gradient(180deg, rgba(139, 124, 246, 0.75), rgba(139, 124, 246, 0.12)); }
+      .steps-viz i.on { background: linear-gradient(180deg, var(--ice), rgba(92, 225, 242, 0.14)); box-shadow: 0 0 20px rgba(92, 225, 242, 0.35); }
+      .cap { margin-top: 12px; font: 400 11px/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--subtle); }
+
+      /* budget meter */
+      .meter { height: 14px; border-radius: 99px; background: rgba(255, 255, 255, 0.06); position: relative; overflow: hidden; }
+      .meter i { position: absolute; inset: 0 auto 0 0; width: 90.7%; background: linear-gradient(90deg, #56627a, #7b869c); border-radius: 99px 0 0 99px; }
+      .meter em { position: absolute; inset: 0 0 0 90.7%; background: repeating-linear-gradient(-55deg, var(--rose) 0 4px, rgba(255, 122, 144, 0.25) 4px 8px); }
+      .meter-legend { margin-top: 12px; display: flex; justify-content: space-between; font: 400 12px/1.3 var(--mono); color: var(--subtle); }
+      .meter-legend b { color: var(--rose); font-weight: 500; }
+
+      /* ---------- how ---------- */
+      .how { margin-top: clamp(36px, 5vw, 60px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr); gap: clamp(28px, 5vw, 80px); align-items: center; }
+      .how ol { counter-reset: s; display: grid; gap: 14px; }
+      .how li { counter-increment: s; position: relative; padding: 26px 26px 26px 84px; border-radius: 22px; border: 1px solid var(--line); background: var(--surface); transition: border-color 0.3s, background 0.3s; }
+      .how li:hover { border-color: rgba(92, 225, 242, 0.28); background: var(--surface-2); }
+      .how li::before { content: '0' counter(s); position: absolute; left: 26px; top: 26px; width: 40px; height: 40px; display: grid; place-items: center; border-radius: 12px; background: var(--grad-soft); border: 1px solid rgba(92, 225, 242, 0.3); font: 500 13px/1 var(--mono); color: var(--ice); }
+      .how h3 { font-size: 21px; letter-spacing: -0.02em; font-weight: 620; }
+      .how li p { margin-top: 6px; font-size: 15.5px; color: var(--muted); }
+      .chips { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; }
+      .chips span { padding: 6px 12px; border-radius: 99px; font-size: 13.5px; color: var(--text); background: rgba(255, 255, 255, 0.05); border: 1px solid var(--line); }
+      .how-stage { position: relative; display: grid; place-items: center; padding: 20px 0; }
+      .how-stage::before { content: ''; position: absolute; width: 90%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(closest-side, rgba(139, 124, 246, 0.3), transparent); }
+      .how-stage .phone { width: min(300px, 70vw); }
+
+      /* ---------- gallery ---------- */
+      .gallery { margin-top: clamp(36px, 5vw, 56px); display: flex; gap: 22px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 8px var(--pad) 34px; scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.18) transparent; -webkit-overflow-scrolling: touch; }
+      .gallery::-webkit-scrollbar { height: 6px; }
+      .gallery::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.16); border-radius: 99px; }
+      .shot { flex: none; width: 270px; scroll-snap-align: center; }
+      .shot .phone { width: 100%; border-radius: 44px; padding: 8px; transition: transform 0.45s var(--ease); }
+      .shot .phone img { border-radius: 37px; }
+      .shot .phone::after { inset: 8px; border-radius: 37px; }
+      .shot .phone::before { top: 17px; }
+      .shot:hover .phone { transform: translateY(-8px); }
+      .shot figcaption { margin-top: 20px; padding: 0 6px; }
+      .shot figcaption b { display: block; font-size: 17px; line-height: 1.25; letter-spacing: -0.015em; font-weight: 600; }
+      .shot figcaption span { display: block; margin-top: 6px; font-size: 14px; line-height: 1.5; color: var(--subtle); }
+      .gallery-note { text-align: center; font: 400 11px/1.5 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--subtle); padding: 0 var(--pad); }
+
+      /* ---------- research ---------- */
+      .duo { margin-top: clamp(36px, 5vw, 60px); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+      .duo .card { padding: 34px; }
+      .duo .ico { width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; background: var(--grad-soft); border: 1px solid rgba(92, 225, 242, 0.28); color: var(--ice); margin-bottom: 22px; }
+      .duo .ico svg { width: 24px; height: 24px; }
+      .duo ul { margin-top: 18px; display: grid; gap: 10px; }
+      .duo li { position: relative; padding-left: 26px; font-size: 15.5px; color: var(--muted); }
+      .duo li::before { content: ''; position: absolute; left: 2px; top: 0.62em; width: 12px; height: 2px; border-radius: 2px; background: var(--ice); }
+      .fine { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 13.5px; line-height: 1.55; color: var(--subtle); }
+
+      /* ---------- limits ---------- */
+      .limits { margin-top: clamp(36px, 5vw, 60px); border-radius: 30px; border: 1px solid var(--line); background: radial-gradient(80% 120% at 100% 0%, rgba(139, 124, 246, 0.14), transparent 60%), var(--surface); padding: clamp(28px, 4vw, 52px); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px clamp(24px, 4vw, 56px); }
+      .limits li { display: flex; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--line); font-size: 16.5px; color: var(--muted); }
+      .limits li b { color: var(--text); font-weight: 600; }
+      .limits svg { flex: none; width: 22px; height: 22px; margin-top: 2px; color: var(--subtle); }
+
+      /* ---------- pricing ---------- */
+      .plans { margin-top: clamp(36px, 5vw, 60px); display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 18px; align-items: stretch; }
+      .plan { padding: clamp(28px, 3.4vw, 42px); border-radius: 28px; border: 1px solid var(--line); background: var(--surface); display: flex; flex-direction: column; }
+      .plan.pro { position: relative; border: 1px solid transparent; background: linear-gradient(var(--surface-2), var(--surface-2)) padding-box, linear-gradient(140deg, rgba(92, 225, 242, 0.75), rgba(139, 124, 246, 0.6) 55%, rgba(255, 255, 255, 0.08)) border-box; box-shadow: 0 40px 100px -50px rgba(92, 225, 242, 0.5); }
+      .plan h3 { font-size: 15px; font-family: var(--mono); font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--subtle); }
+      .plan.pro h3 { color: var(--ice); }
+      .plan .big { margin-top: 14px; font-size: clamp(38px, 4.4vw, 54px); font-weight: 650; letter-spacing: -0.045em; line-height: 1; }
+      .plan .big small { font-size: 16px; font-weight: 450; letter-spacing: 0; color: var(--subtle); margin-left: 6px; }
+      .plan .or { margin-top: 10px; font-size: 16px; color: var(--muted); }
+      .plan .or b { color: var(--text); font-weight: 600; }
+      .plan ul { margin-top: 26px; display: grid; gap: 12px; }
+      .plan li { display: flex; gap: 12px; font-size: 16px; color: var(--muted); }
+      .plan li svg { flex: none; width: 20px; height: 20px; margin-top: 3px; color: var(--ice); }
+      .plan .fine { margin-top: auto; padding-top: 22px; border-top: 0; }
+      .plan .fine::before { content: ''; display: block; height: 1px; background: var(--line); margin-bottom: 18px; }
+
+      /* ---------- faq ---------- */
+      .faq-grid { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(28px, 5vw, 80px); align-items: start; }
+      .faq-grid .sec-head { position: sticky; top: 110px; }
+      .faq-grid .sec-head .btn { margin-top: 28px; }
+      .faq { display: grid; gap: 10px; }
+      .faq details { border-radius: 18px; border: 1px solid var(--line); background: var(--surface); transition: border-color 0.3s, background 0.3s; }
+      .faq details[open] { border-color: rgba(92, 225, 242, 0.28); background: var(--surface-2); }
+      .faq summary { cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 20px 24px; font-size: 18px; font-weight: 580; letter-spacing: -0.015em; min-height: 44px; }
+      .faq summary::-webkit-details-marker { display: none; }
+      .faq summary::after { content: ''; flex: none; width: 12px; height: 12px; border-right: 2px solid var(--subtle); border-bottom: 2px solid var(--subtle); transform: rotate(45deg) translate(-3px, -3px); transition: transform 0.3s var(--ease); }
+      .faq details[open] summary::after { transform: rotate(225deg) translate(-3px, -3px); border-color: var(--ice); }
+      .faq p { padding: 0 24px 22px; font-size: 16px; color: var(--muted); max-width: 46em; }
+
+      /* ---------- closing ---------- */
+      .closing { margin: clamp(72px, 10vw, 136px) 0 0; }
+      .closing .box { position: relative; overflow: hidden; border-radius: 36px; border: 1px solid var(--line-strong); padding: clamp(44px, 7vw, 96px) clamp(24px, 5vw, 72px); text-align: center; background: radial-gradient(60% 90% at 50% 0%, rgba(92, 225, 242, 0.2), transparent 70%), radial-gradient(50% 80% at 85% 100%, rgba(139, 124, 246, 0.24), transparent 70%), var(--surface); }
+      .closing h2 { font-size: clamp(38px, 5.6vw, 76px); line-height: 1; letter-spacing: -0.045em; font-weight: 650; text-wrap: balance; }
+      .closing p { margin: 20px auto 0; max-width: 32em; font-size: 18px; color: var(--muted); }
+      .closing .cta-row { justify-content: center; }
+
+      footer { position: relative; z-index: 1; margin-top: clamp(56px, 8vw, 96px); border-top: 1px solid var(--line); padding: 40px 0 56px; }
+      .foot { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 28px; }
+      .foot p { margin-top: 14px; max-width: 34em; font-size: 14px; color: var(--subtle); }
+      .foot nav { display: flex; flex-wrap: wrap; gap: 4px 6px; }
+      .foot nav a { padding: 11px 12px; border-radius: 10px; font-size: 15px; color: var(--muted); min-height: 44px; display: inline-flex; align-items: center; }
+      .foot nav a:hover { color: var(--text); background: rgba(255, 255, 255, 0.05); }
+
+      /* ---------- reveal ---------- */
+      .js .reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.8s var(--ease), transform 0.8s var(--ease); transition-delay: var(--d, 0s); }
+      .js .reveal.in { opacity: 1; transform: none; }
+      .js .cases .track i { transform: scaleX(0); transition: transform 1s var(--ease) 0.25s; }
+      .js .in .cases .track i, .js .cases.in .track i { transform: scaleX(1); }
+
+      /* ---------- responsive ---------- */
+      @media (max-width: 1020px) {
+        .hero .wrap { grid-template-columns: 1fr; }
+        .hero { padding-bottom: 40px; }
+        .stage { margin-top: 24px; }
+        .readout.r1 { left: 0; }
+        .readout.r2 { right: 0; }
+        .b-wide, .b-tall, .b-half, .b-third { grid-column: span 6; }
+        .how { grid-template-columns: 1fr; }
+        .how-stage { order: -1; }
+        .plans, .duo, .faq-grid { grid-template-columns: 1fr; }
+        .faq-grid .sec-head { position: static; }
+        .strip ul { grid-template-columns: repeat(2, 1fr); }
+        .strip li { padding: 20px 18px; }
+        .strip li:nth-child(odd) { border-left: 0; padding-left: 0; }
+        .strip li:nth-child(n + 3) { border-top: 1px solid var(--line); }
+      }
+      @media (max-width: 760px) {
+        body { font-size: 16.5px; }
+        .nav-links a:not(.btn) { display: none; }
+        .nav .wrap { height: 64px; }
+        .limits { grid-template-columns: 1fr; }
+        .cta-row .btn, .cta-row .store { flex: 1 1 100%; }
+        .stage { min-height: 0; padding: 64px 0 44px; }
+        .dial { width: 128%; }
+        .readout { padding: 11px 14px 12px; border-radius: 15px; }
+        .readout .v { font-size: 26px; }
+        .readout.r1 { left: 0; top: 0; }
+        .readout.r2 { right: -6px; bottom: 18%; }
+        .bento .card, .duo .card { padding: 24px; }
+        .figs { gap: 8px 26px; }
+        .fig .v { font-size: 25px; }
+        .how li { padding: 22px 20px 22px 72px; }
+        .how li::before { left: 18px; top: 22px; }
+        .shot { width: 236px; }
+        .faq summary { font-size: 16.5px; padding: 18px 20px; }
+        .faq p { padding: 0 20px 20px; }
+        .cases li { grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.8fr) 58px; gap: 10px; font-size: 13.5px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        *, *::before, *::after { animation: none !important; transition: none !important; }
+        .dial .sweep { stroke-dashoffset: 262; }
+        .js .reveal { opacity: 1; transform: none; }
+        .js .cases .track i { transform: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <div class="ground" aria-hidden="true"></div>
+
+    <header class="nav" id="nav">
+      <div class="wrap">
+        <a class="brand" href="./" aria-label="CurbWhiz home">
+          <svg viewBox="0 0 32 32" aria-hidden="true">
+            <defs><linearGradient id="lg" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#5ce1f2" /><stop offset="1" stop-color="#8b7cf6" /></linearGradient></defs>
+            <rect width="32" height="32" rx="8" fill="#0d0e10" />
+            <path d="M8 23.08A9.23 9.23 0 1 1 24 23.08" fill="none" stroke="#f1efea" stroke-opacity=".3" stroke-width="2" stroke-linecap="round" />
+            <path d="M8 23.08A9.23 9.23 0 0 1 21.93 11.39" fill="none" stroke="url(#lg)" stroke-width="2.4" stroke-linecap="round" />
+            <path d="M16 18.46L20.43 13.18" stroke="#f1efea" stroke-width="2.4" stroke-linecap="round" />
+            <circle cx="16" cy="18.46" r="2.1" fill="#f1efea" />
+          </svg>
+          <span>Curb<b class="grad-text">Whiz</b></span>
+        </a>
+        <nav class="nav-links" aria-label="Sections">
+          <a href="#numbers">The numbers</a>
+          <a href="#how">How it works</a>
+          <a href="#pricing">Pricing</a>
+          <a href="../support.html">Support</a>
+          <a class="btn btn-ghost btn-sm" href="../">Open the web app</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- ============ HERO ============ -->
+      <section class="hero">
+        <div class="wrap">
+          <div>
+            <p class="eyebrow reveal">For car flippers and used-car buyers</p>
+            <h1 class="reveal" style="--d: 0.06s">Know your <span class="grad-text">max bid</span> before you bid.</h1>
+            <p class="lede reveal" style="--d: 0.12s">
+              CurbWhiz works out the most you can pay for a car — buyer fees, repairs, transport and your profit target counted — so you walk in with <strong>a ceiling, not a guess</strong>.
+            </p>
+            <div class="cta-row reveal" style="--d: 0.18s">
+              <a class="btn btn-primary" href="../">
+                Try it in your browser
+                <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+              </a>
+              <span class="store" role="img" aria-label="iPhone app coming soon to the App Store">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.05 12.54c-.03-2.76 2.25-4.09 2.36-4.15-1.29-1.88-3.29-2.14-4-2.17-1.7-.17-3.32 1-4.18 1-.86 0-2.19-.98-3.6-.95-1.85.03-3.56 1.08-4.51 2.73-1.92 3.33-.49 8.26 1.38 10.97.92 1.32 2.01 2.81 3.44 2.76 1.38-.06 1.9-.89 3.57-.89 1.67 0 2.14.89 3.6.86 1.49-.03 2.43-1.35 3.34-2.68 1.05-1.54 1.48-3.03 1.51-3.11-.03-.01-2.89-1.11-2.91-4.37zM14.3 4.43c.76-.92 1.27-2.2 1.13-3.47-1.09.04-2.42.73-3.2 1.65-.7.81-1.32 2.11-1.15 3.36 1.22.09 2.46-.62 3.22-1.54z" /></svg>
+                <span><small>iPhone app · coming soon to the</small><b>App Store</b></span>
+              </span>
+            </div>
+            <ul class="ticks reveal" style="--d: 0.24s">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>No account for local checks</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>Deal math works offline</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>No ads or advertising tracking</li>
+            </ul>
+          </div>
+
+          <div class="stage reveal" style="--d: 0.15s">
+            <svg class="dial" viewBox="0 0 400 400" fill="none" aria-hidden="true">
+              <defs><linearGradient id="dg" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#5ce1f2" /><stop offset="0.55" stop-color="#38bdf8" /><stop offset="1" stop-color="#8b7cf6" /></linearGradient></defs>
+              <g class="tick" stroke-width="2" stroke-linecap="round">
+                <path d="M73 327l-12 12M30 200H13M73 73L61 61M200 30V13M327 73l12-12M370 200h17M327 327l12 12" />
+                <path d="M42.900 265.070l-11.090 4.590M42.900 134.930l-11.090-4.590M134.930 42.900l-4.590-11.090M265.070 42.900l4.590-11.090M357.100 134.930l11.090-4.590M357.100 265.070l11.090 4.590" stroke-opacity=".6" />
+              </g>
+              <path class="track" d="M93.93 306.07A150 150 0 1 1 306.07 306.07" stroke-width="10" stroke-linecap="round" />
+              <path class="sweep" d="M93.93 306.07A150 150 0 1 1 306.07 306.07" stroke="url(#dg)" stroke-width="10" stroke-linecap="round" />
+            </svg>
+
+            <div class="phone">
+              <img src="img/max-bid.webp" width="660" height="1434" alt="CurbWhiz on iPhone: the auction-flip worked example showing margin after contingency $1,350 and max bid $7,950, with the note “Below your target under these assumptions”." fetchpriority="high" />
+            </div>
+
+            <div class="readout r1">
+              <div class="k">Max bid</div>
+              <div class="v"><sup>$</sup><span data-count="7950">7,950</span></div>
+            </div>
+            <div class="readout r2">
+              <div class="k">Your bid · $8,000</div>
+              <div class="v"><sup>$</sup>50 <span style="font-size: 0.5em; font-weight: 500; letter-spacing: 0; color: var(--rose)">over</span></div>
+            </div>
+            <p class="stage-note">Worked example · synthetic numbers</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ PRINCIPLES ============ -->
+      <section class="strip" aria-label="What to expect">
+        <div class="wrap">
+          <ul>
+            <li class="reveal"><b>Unknown is never $0</b><span>A missing cost holds the answer back.</span></li>
+            <li class="reveal" style="--d: 0.06s"><b>Every number has a reason</b><span>Assumptions and sources on show.</span></li>
+            <li class="reveal" style="--d: 0.12s"><b>Saved on your device</b><span>Deals stay there unless you turn on sync.</span></li>
+            <li class="reveal" style="--d: 0.18s"><b>Private seller, dealer or auction</b><span>One check for all three.</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============ NUMBERS / BENTO ============ -->
+      <section class="sec" id="numbers">
+        <div class="wrap">
+          <div class="sec-head">
+            <p class="eyebrow reveal">The numbers</p>
+            <h2 class="reveal" style="--d: 0.06s">The napkin math, <span class="grad-text">done to the cent.</span></h2>
+            <p class="reveal" style="--d: 0.12s">Type what you know. CurbWhiz does the arithmetic — fees, tax, repairs, contingency and margin — and gives you the highest price that still fits your target or your budget.</p>
+          </div>
+
+          <div class="bento">
+            <article class="card b-wide reveal">
+              <span class="tag">Worked example · synthetic numbers</span>
+              <h3 style="margin-top: 14px">Your max bid, fees included</h3>
+              <p>Buyer-fee brackets, repairs and contingency, solved back to the bid that still leaves your profit target.</p>
+              <div class="viz">
+                <div class="ladder" role="img" aria-label="Price ladder for the worked example: max bid $7,950, your bid $8,000, costs on top of the bid up to $11,650, and margin up to the $13,000 resale.">
+                  <div class="grid"></div>
+                  <div class="bar costs"></div>
+                  <div class="bar margin"></div>
+                  <div class="pin p-max"><i>Max bid</i></div>
+                  <div class="pin p-bid"><i>Your bid</i></div>
+                  <div class="pin p-res"><i>Resale</i></div>
+                  <div class="axis"><span>$6,000</span><span>$8,000</span><span>$10,000</span><span>$12,000</span><span>$14,000</span></div>
+                </div>
+                <div class="figs">
+                  <div class="fig"><div class="k">Max bid</div><div class="v ice">$7,950</div></div>
+                  <div class="fig"><div class="k">Margin</div><div class="v">$1,350</div></div>
+                  <div class="fig"><div class="k">Target</div><div class="v">$1,500</div></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="card b-tall reveal" style="--d: 0.08s">
+              <h3>Unknown costs never become $0</h3>
+              <p>CurbWhiz holds back the ceiling until every required cost is answered — entered, estimated, or marked not applicable.</p>
+              <div class="viz">
+                <ul class="rows" aria-label="Example cost lines">
+                  <li>Buyer fee <span class="pill ok">Entered</span></li>
+                  <li>Transport <span class="pill unk">Unknown</span></li>
+                  <li>Repairs <span class="pill unk">Unknown</span></li>
+                  <li>Title &amp; registration <span class="pill unk">Unknown</span></li>
+                </ul>
+                <div class="noread"><span>Max bid</span><b>No reading yet</b></div>
+              </div>
+            </article>
+
+            <article class="card b-half reveal">
+              <span class="tag">Worked example · synthetic numbers</span>
+              <h3 style="margin-top: 14px">Stress-test it before you bid</h3>
+              <p>See the margin if repairs run higher or the resale comes in lower. Scenarios, not predictions.</p>
+              <div class="viz">
+                <ul class="cases reveal" aria-label="Downside cases from the worked example">
+                  <li>Base assumptions <span class="track"><i style="width: 100%"></i></span><span class="amt">$1,350</span></li>
+                  <li>Repairs up $1,000 <span class="track"><i style="width: 26%"></i></span><span class="amt">$350</span></li>
+                  <li>Resale down 10% <span class="track"><i style="width: 5%"></i></span><span class="amt">$50</span></li>
+                  <li class="loss">Both happen <span class="track"><i style="width: 70%"></i></span><span class="amt">−$950</span></li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="card b-half reveal" style="--d: 0.08s">
+              <span class="tag">Worked example · synthetic numbers</span>
+              <h3 style="margin-top: 14px">The most you can pay within your budget</h3>
+              <p>Buying to keep? Tax, title, transport, repairs and contingency are counted against your budget. Any loan payment is shown separately.</p>
+              <div class="viz">
+                <div class="meter" role="img" aria-label="All-in cost $13,230 against a $12,000 budget: over by $1,230."><i></i><em></em></div>
+                <div class="meter-legend"><span>All-in $13,230</span><span>Budget $12,000 · <b>$1,230 over</b></span></div>
+                <div class="figs" style="margin-top: 18px">
+                  <div class="fig"><div class="k">Max price</div><div class="v ice">$9,339.62</div></div>
+                  <div class="fig"><div class="k">Asking</div><div class="v">$10,500</div></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="card b-third reveal">
+              <h3>Auction fees by bracket</h3>
+              <p>Buyer fees step up with the price. CurbWhiz shows the fee cliff: the bid steps around your max bid.</p>
+              <div class="viz">
+                <div class="steps-viz" aria-hidden="true"><i style="height: 22%"></i><i style="height: 22%"></i><i style="height: 40%"></i><i class="on" style="height: 40%"></i><i style="height: 64%"></i><i style="height: 64%"></i><i style="height: 88%"></i><i style="height: 88%"></i></div>
+                <p class="cap">Illustration · enter the fees from your auction’s own terms</p>
+              </div>
+            </article>
+
+            <article class="card b-third reveal" style="--d: 0.08s">
+              <h3>Check the car as well as the math</h3>
+              <p>Title, mileage and inspection checks stay separate from a calculated profit — with the questions to ask before you pay.</p>
+              <div class="viz">
+                <ul class="rows" aria-label="Example checks">
+                  <li>Clean title confirmed <span class="pill unk">Open</span></li>
+                  <li>Independent inspection <span class="pill unk">Open</span></li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="card b-third reveal" style="--d: 0.16s">
+              <h3>A report you can share</h3>
+              <p>Assumptions, sources and open questions together in one deal report. Free to read; sharing and printing are part of Pro.</p>
+              <div class="viz">
+                <ul class="rows" aria-label="Report contents">
+                  <li>Personal details <span class="pill ok">Hidden by default</span></li>
+                  <li>Formula version <span class="pill ok">Printed on it</span></li>
+                </ul>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ HOW ============ -->
+      <section class="sec" id="how">
+        <div class="wrap">
+          <div class="sec-head">
+            <p class="eyebrow reveal">How it works</p>
+            <h2 class="reveal" style="--d: 0.06s">From listing to limit <span class="grad-text">in three steps.</span></h2>
+          </div>
+          <div class="how">
+            <ol>
+              <li class="reveal">
+                <h3>Start with what you have</h3>
+                <p>A VIN on the door jamb, a screenshot of the listing, pasted seller text — or just the price.</p>
+                <div class="chips"><span>Scan VIN</span><span>Read a screenshot</span><span>Paste a listing</span><span>Type it in</span></div>
+              </li>
+              <li class="reveal" style="--d: 0.08s">
+                <h3>Fill in the costs</h3>
+                <p>Start from labelled estimates for supported taxes, registration, fees, transport and inspection. Review the sources and dates, then replace them with your own quotes.</p>
+              </li>
+              <li class="reveal" style="--d: 0.16s">
+                <h3>Get your ceiling</h3>
+                <p>Your max bid or max price, the downside cases, and the checks to finish before money changes hands.</p>
+              </li>
+            </ol>
+            <div class="how-stage reveal" style="--d: 0.1s">
+              <div class="phone">
+                <img src="img/listing.webp" width="660" height="1434" loading="lazy" alt="CurbWhiz on iPhone: a 2018 Toyota Camry SE worked example with the options Read a screenshot, Scan VIN and Paste a listing." />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ GALLERY ============ -->
+      <section class="sec" id="screens" aria-labelledby="screens-h">
+        <div class="wrap">
+          <div class="sec-head">
+            <p class="eyebrow reveal">On iPhone</p>
+            <h2 class="reveal" id="screens-h" style="--d: 0.06s">An instrument panel <span class="grad-text">for the deal.</span></h2>
+            <p class="reveal" style="--d: 0.12s">Real screens from the iPhone app. VIN camera scan, on-device screenshot reading, widgets, Shortcuts and an auction-day Live Activity are built in.</p>
+          </div>
+        </div>
+        <div class="gallery reveal" tabindex="0" role="region" aria-label="App screens, scroll sideways">
+          <figure class="shot">
+            <div class="phone"><img src="img/unknown.webp" width="660" height="1434" loading="lazy" alt="Quick check with a bid, expected resale and target profit typed in; 8 costs still Unknown and no reading shown." /></div>
+            <figcaption><b>Unknown costs never become $0</b><span>See missing costs before you commit.</span></figcaption>
+          </figure>
+          <figure class="shot">
+            <div class="phone"><img src="img/checks.webp" width="660" height="1434" loading="lazy" alt="Decision step listing checks before you bid: clean title not yet confirmed, no independent inspection recorded." /></div>
+            <figcaption><b>Check the car as well as the math</b><span>Evidence checks stay apart from the profit.</span></figcaption>
+          </figure>
+          <figure class="shot">
+            <div class="phone"><img src="img/downside.webp" width="660" height="1434" loading="lazy" alt="Downside section: margin under base assumptions, higher repairs, lower resale, and both together." /></div>
+            <figcaption><b>Stress-test the deal</b><span>Higher repairs, lower resale, or both.</span></figcaption>
+          </figure>
+          <figure class="shot">
+            <div class="phone"><img src="img/report.webp" width="660" height="1434" loading="lazy" alt="Deal report preview with personal info redacted, the margin after contingency and the max bid." /></div>
+            <figcaption><b>Every number has a reason</b><span>One shareable report per deal.</span></figcaption>
+          </figure>
+          <figure class="shot">
+            <div class="phone"><img src="img/budget.webp" width="660" height="1434" loading="lazy" alt="Private purchase worked example: estimated all-in cost $13,230 against a $12,000 budget, max price $9,339.62." /></div>
+            <figcaption><b>The most you can pay</b><span>All-in cost against your budget.</span></figcaption>
+          </figure>
+        </div>
+        <p class="gallery-note">Worked examples · synthetic numbers — not real cars, listings or fees</p>
+      </section>
+
+      <!-- ============ RESEARCH ============ -->
+      <section class="sec" id="research">
+        <div class="wrap">
+          <div class="sec-head">
+            <p class="eyebrow reveal">Before you buy</p>
+            <h2 class="reveal" style="--d: 0.06s">Research the car, <span class="grad-text">not just the price.</span></h2>
+          </div>
+          <div class="duo">
+            <article class="card reveal">
+              <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.2 7.9-8 9-4.800-1.100-8-4.500-8-9V6l8-3z" /><path d="M9 12l2.200 2.200L15.500 10" /></svg></div>
+              <h3>Recalls, complaints and fuel cost</h3>
+              <p>Public records for the model year, in one place.</p>
+              <ul>
+                <li>NHTSA recall campaigns, complaints and crash ratings</li>
+                <li>EPA fuel-cost research</li>
+                <li>A link to NHTSA’s lookup for the actual VIN</li>
+              </ul>
+              <p class="fine">Model-year records do not establish this VIN’s recall repair status or safety. Check the actual VIN with NHTSA and the manufacturer.</p>
+            </article>
+            <article class="card reveal" style="--d: 0.08s">
+              <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v13H7z" /><path d="M14 3v5h5M10 13h6M10 17h6" /></svg></div>
+              <h3>Vehicle history reports</h3>
+              <p>Optional VINData reports, bought one at a time or as a 5-pack — with or without Pro.</p>
+              <ul>
+                <li>Reported title brands, salvage and total-loss records</li>
+                <li>Odometer readings and open liens</li>
+                <li>Recovered thefts and other reported events, where available</li>
+              </ul>
+              <p class="fine">Active theft records, detailed accident or repair history and auction photos are not provided. Missing records do not mean a clean title or a safe car. Reports need sign-in and your approval to send the VIN to VINData. Every report includes the NMVTIS disclaimer and is no substitute for an inspection.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ LIMITS ============ -->
+      <section class="sec" id="limits">
+        <div class="wrap">
+          <div class="sec-head">
+            <p class="eyebrow reveal">Straight talk</p>
+            <h2 class="reveal" style="--d: 0.06s">What CurbWhiz <span class="grad-text">won’t do.</span></h2>
+            <p class="reveal" style="--d: 0.12s">It is a calculator and a checklist. The judgment — and the inspection — stay with you.</p>
+          </div>
+          <ul class="limits reveal">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M8 12h8" /></svg><span><b>No market values, no listing discovery.</b> The numbers come from what you enter.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M8 12h8" /></svg><span><b>No promise of profit.</b> Results depend on reviewed inputs and available evidence.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M8 12h8" /></svg><span><b>No verdict on the car.</b> “Meets your target” is about the money, not a recommendation to buy.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M8 12h8" /></svg><span><b>Not financial, legal or tax advice.</b> Check tax, title and fee rules with your state and the seller or auction.</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============ PRICING ============ -->
+      <section class="sec" id="pricing">
+        <div class="wrap">
+          <div class="sec-head">
+            <p class="eyebrow reveal">Pricing · iPhone app</p>
+            <h2 class="reveal" style="--d: 0.06s">Checking is free. <span class="grad-text">Pro keeps the book.</span></h2>
+          </div>
+          <div class="plans">
+            <article class="plan reveal">
+              <h3>Free, always</h3>
+              <div class="big">$0</div>
+              <ul>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>The Check tab — local deal math, no account</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>Both worked examples</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>Learn</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>Exporting or erasing your data</li>
+              </ul>
+              <p class="fine">Backing up, restoring and deleting are always free.</p>
+              <a class="btn btn-ghost" style="margin-top: 20px" href="../">Try it in your browser</a>
+            </article>
+            <article class="plan pro reveal" style="--d: 0.08s">
+              <h3>CurbWhiz Pro</h3>
+              <div class="big">$99.99<small>per year</small></div>
+              <p class="or">or <b>$19.99</b> per month</p>
+              <ul>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>Saved deals and Compare</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>The shareable PDF report and snapshot history</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>Your own fee tables and deadline reminders</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>The Money tab: purchases, expenses and sales</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>Annual includes 1 vehicle history report per calendar month</li>
+              </ul>
+              <p class="fine">U.S. reference prices. Annual may offer an eligible 3-day trial; monthly has no free trial. Confirm prices, billing periods and trial terms in Apple’s purchase sheet. Subscriptions renew automatically unless cancelled at least 24 hours before the period ends. Included reports unlock after confirmed payment, not during a trial, and do not roll over. Monthly Pro does not include history reports. Losing Pro never deletes saved deals.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ FAQ ============ -->
+      <section class="sec" id="faq">
+        <div class="wrap faq-grid">
+          <div class="sec-head">
+            <p class="eyebrow reveal">Questions</p>
+            <h2 class="reveal" style="--d: 0.06s">Asked before <span class="grad-text">the auction.</span></h2>
+            <p class="reveal" style="--d: 0.12s">The short answers. The support guide has the rest.</p>
+            <a class="btn btn-ghost btn-sm reveal" style="--d: 0.16s" href="../support.html">Open the support guide</a>
+          </div>
+          <div class="faq reveal">
+            <details>
+              <summary>Do I need an account?</summary>
+              <p>No account is needed for local checks or worked examples. Sign-in is needed for vehicle history reports and account features. Signing in alone does not upload or synchronize deals.</p>
+            </details>
+            <details>
+              <summary>Where do the numbers come from?</summary>
+              <p>From what you enter. CurbWhiz does the arithmetic: fees, tax, repairs, contingency, margin and the highest price that fits. It doesn’t look up market values or find listings. For a real auction, enter the buyer fees from its own terms.</p>
+            </details>
+            <details>
+              <summary>Why does a cost say “Unknown” instead of $0?</summary>
+              <p>Because you haven’t entered it yet, and CurbWhiz never treats a missing cost as free. Fill in the line it names, or mark it “Not applicable” if it really doesn’t apply.</p>
+            </details>
+            <details>
+              <summary>Is the result a recommendation to buy?</summary>
+              <p>No. “Meets your target under these assumptions” is about the money, given the numbers you entered. It isn’t a judgment about the car. The checks section lists what to confirm — title, VIN, inspection, mileage and prices — before you buy.</p>
+            </details>
+            <details>
+              <summary>Does it work offline?</summary>
+              <p>Local deal calculations and saved content on your device work offline. Sign-in, subscription changes, fresh VIN decoding, new history reports, cloud AI and device sync need a connection.</p>
+            </details>
+            <details>
+              <summary>Where are my deals stored?</summary>
+              <p>On your device. If you explicitly enable device sync, selected deals can also be stored in your private CurbWhiz account. Signing in alone does not upload them.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ CLOSING ============ -->
+      <section class="closing">
+        <div class="wrap">
+          <div class="box reveal">
+            <h2>Walk in with <span class="grad-text">a number.</span></h2>
+            <p>Run your next car through CurbWhiz before you raise a hand or shake one.</p>
+            <div class="cta-row">
+              <a class="btn btn-primary" href="../">
+                Try it in your browser
+                <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+              </a>
+              <a class="btn btn-ghost" href="../support.html">Read the support guide</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap foot">
+        <div>
+          <a class="brand" href="./" aria-label="CurbWhiz home">
+            <svg viewBox="0 0 32 32" aria-hidden="true">
+              <rect width="32" height="32" rx="8" fill="#0d0e10" />
+              <path d="M8 23.08A9.23 9.23 0 1 1 24 23.08" fill="none" stroke="#f1efea" stroke-opacity=".3" stroke-width="2" stroke-linecap="round" />
+              <path d="M8 23.08A9.23 9.23 0 0 1 21.93 11.39" fill="none" stroke="url(#lg)" stroke-width="2.4" stroke-linecap="round" />
+              <path d="M16 18.46L20.43 13.18" stroke="#f1efea" stroke-width="2.4" stroke-linecap="round" />
+              <circle cx="16" cy="18.46" r="2.1" fill="#f1efea" />
+            </svg>
+            <span>Curb<b class="grad-text">Whiz</b></span>
+          </a>
+          <p>CurbWhiz is a calculator and a checklist — not financial, legal or tax advice. © 2026 Universal AI LLC.</p>
+        </div>
+        <nav aria-label="Footer">
+          <a href="../">Web app</a>
+          <a href="../support.html">Support</a>
+          <a href="../privacy.html">Privacy</a>
+          <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" rel="noopener">Terms of Use</a>
+          <a href="mailto:contact+support@universalaillc.com?subject=CurbWhiz%20support">Contact</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script>(function(){var d=document,h=d.documentElement;h.classList.add('js');var n=d.getElementById('nav');function s(){n.classList.toggle('is-stuck',window.scrollY>12)}s();window.addEventListener('scroll',s,{passive:true});var r=d.querySelectorAll('.reveal');if(!('IntersectionObserver'in window)){r.forEach(function(e){e.classList.add('in')});return}var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -8% 0px',threshold:0.08});r.forEach(function(e){io.observe(e)});var c=d.querySelector('[data-count]');if(c&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){var t=+c.getAttribute('data-count'),t0=null;c.textContent='0';requestAnimationFrame(function f(ts){if(!t0)t0=ts+350;var p=Math.min(1,Math.max(0,(ts-t0)/1300));p=1-Math.pow(1-p,4);c.textContent=Math.round(t*p).toLocaleString('en-US');if(p<1)requestAnimationFrame(f)})}})();</script>
+  </body>
+</html>
