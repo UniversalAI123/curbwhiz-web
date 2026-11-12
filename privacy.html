@@ -441,6 +441,17 @@
       <section class="card" aria-labelledby="stays">
         <h2 id="stays">What stays on your device</h2>
         <p>
+          Quick Check draft recovery is optional. If enabled, amounts, mode, purchase channel and cost choices are kept only on this device for up to 24 hours;
+          VINs and Visual Intelligence link details are excluded. This draft is not synced or included in deal backups. Saving the deal or switching recovery
+          off removes the draft; expired drafts are removed when the app next opens or resumes. Device-data deletion also clears it.
+        </p>
+        <p>
+          Optional government-auction search keeps your filters, up to 100 hidden lot IDs, up to 500 previous lot IDs and bid observations, up to 50 update
+          markers, and check times on this device, scoped to your signed-in account and service. These settings may also be in the iPhone recovery mirror and
+          your device backups. They are separate from selected-deal sync. Observations more than 24 hours old are not used to identify newly seen lots. Turning
+          watching off stops automatic screen checks; Delete everything on this device removes these settings and observations.
+        </p>
+        <p>
           Your entries are stored on your device by default. If you separately approve selected-deal sync, our Supabase service also stores those chosen records
           and supported files under your account. Authorized service operators can access server records for support, security and operation; these copies are
           not end-to-end encrypted against the operator.
@@ -517,9 +528,18 @@
         </p>
         <p>
           The last ten screen or JavaScript error categories and their timestamps are kept only in the open app's memory. Error messages, exception details,
-          rejection contents and stacks are not copied into diagnostic downloads. Nothing is sent automatically. Report a problem lets you download build and
-          device facts with these categories, or clear the categories; Delete everything also clears them. Later errors can create new entries. These categories
-          do not measure native crashes or reliably count separate incidents.
+          rejection contents and stacks are not copied into diagnostic downloads. These local diagnostics are not uploaded by default. Report a problem lets you
+          download build and device facts with these categories, or clear the categories; Delete everything also clears them. Later errors can create new
+          entries. These categories do not measure native crashes or reliably count separate incidents.
+        </p>
+        <p>
+          Optional native crash reporting, when available on iPhone, is off by default and requires your separate consent in Settings. If you turn it on, Sentry
+          processes crash times, app and SDK versions, build identifiers, machine-code addresses, and diagnostic event/session identifiers. Reports exclude deal
+          records, media, attachments, account details, error text, screenshots and session replay. The service receives your network address in transit; report
+          payloads use a neutral IP value and request no IP inference. Captures are limited to five per minute and twenty per twenty-four-hour reporting window
+          on each installation; malformed reporting-budget state fails closed. Turning reporting off stops new capture and removes the app's reporting queue,
+          while a request already in transit may finish. Reports already delivered remain with Sentry under its retention policy; contact
+          contact@universalaillc.com about deletion. Local budget counters survive consent changes to prevent repeated toggling from removing limits.
         </p>
         <p>
           On iPhone, review-request timing and your on/off preference are stored locally and in the local recovery mirror: first-use time, recent days with a
@@ -641,6 +661,27 @@
               <span
                 >A normal visit to the official provider’s page when you tap its link. Guidance links include no saved deal, VIN or inspection notes; reading
                 the in-app guidance sends nothing.</span
+              >
+            </p>
+          </li>
+          <li class="flow">
+            <p class="flow__name">GSA government vehicle auctions</p>
+            <p class="flow__row">
+              <span class="caption">Where</span><span>Our Supabase account service; api.gsa.gov and GSA's delegated public auction-data storage.</span>
+            </p>
+            <p class="flow__row">
+              <span class="caption">What</span
+              ><span
+                >Your account token authenticates the request to our service. Our server requests a shared public listing snapshot. Search filters, hidden lots
+                and update comparisons stay on your device; no account token, VIN, saved deal or private notes are sent to GSA.</span
+              >
+            </p>
+            <p class="flow__row">
+              <span class="caption">When</span
+              ><span
+                >When you load auction listings, or at most every 15 minutes after you enable watching while the auction screen is open and visible. There are
+                no background checks or phone push alerts for this watch. Tapping an official lot link opens GSA's site under its own policies. A current bid is
+                not a retail valuation or a final sale price.</span
               >
             </p>
           </li>
@@ -801,7 +842,10 @@
         <ul>
           <li>Pilot sign-in is optional and does not start sync. Selected-deal sync needs separate approval.</li>
           <li>No advertising and no advertising identifiers. CurbWhiz never asks to track you.</li>
-          <li>No advertising analytics or separate crash-reporting SDK. RevenueCat processes subscription records for functionality and purchase analytics.</li>
+          <li>
+            No advertising analytics. Crash reporting stays off unless you turn it on in Settings, where that option is available (see above). RevenueCat
+            processes subscription records for functionality and purchase analytics.
+          </li>
           <li>No cookies.</li>
           <li>
             We do not sell personal information, share it for targeted advertising or use data brokers. The service providers described here process data to run
@@ -817,8 +861,8 @@
         <h2 id="web">This website</h2>
         <p>
           CurbWhiz is an iPhone app. This website has a home page, the support guide and this policy; it does not ask for or store your deals. An earlier web
-          version of CurbWhiz, no longer offered, saved deals in the storage of the browser you used. Clearing this site's data in that browser removes
-          anything it saved.
+          version of CurbWhiz, no longer offered, saved deals in the storage of the browser you used. Clearing this site's data in that browser removes anything
+          it saved.
         </p>
         <p>
           The pages are hosted on GitHub Pages. Like every web host, GitHub receives standard request data when the pages load, such as your IP address, your
@@ -837,10 +881,10 @@
           <li><strong>Back up:</strong> you can download a backup of your deals. This does not remove any cloud copy you separately approved for sync.</li>
           <li><strong>Subscription:</strong> manage or cancel it in iOS Settings, under your name and then Subscriptions. Apple handles refunds.</li>
           <li>
-            <strong>Privacy questions or personal-data requests:</strong> email <a href="mailto:contact@universalaillc.com">contact@universalaillc.com</a>. Your local-only vehicle
-            records stay on your device; selected sync records also have private server copies. If you contact us, support can read your sender address and the
-            message you choose to send. We can also help with questions about the subscription records RevenueCat keeps for this app, including an account
-            connection you approved where that feature is enabled.
+            <strong>Privacy questions or personal-data requests:</strong> email <a href="mailto:contact@universalaillc.com">contact@universalaillc.com</a>. Your
+            local-only vehicle records stay on your device; selected sync records also have private server copies. If you contact us, support can read your
+            sender address and the message you choose to send. We can also help with questions about the subscription records RevenueCat keeps for this app,
+            including an account connection you approved where that feature is enabled.
           </li>
         </ul>
       </section>
@@ -933,9 +977,10 @@
           Confirmed deletion removes the Auth account and its account-owned workspaces, memberships, request receipts, licensed result copies, saved searches,
           purchase-identity mappings and account-keyed usage records. Aggregate daily cost counters contain no account ID and may remain. Device deals and
           attachments remain until you delete them separately. This does not cancel an Apple subscription. If deletion cannot be confirmed or email delivery is
-          unavailable, email our privacy contact at <a href="mailto:contact@universalaillc.com">contact@universalaillc.com</a>. Supabase, Resend, Apple and RevenueCat may retain service logs, purchase records or backups under
-          their own policies; deleting an account does not promise immediate erasure of those separate copies. Support messages remain in our business mailbox
-          while needed to answer requests or keep necessary business records; contact us to request deletion.
+          unavailable, email our privacy contact at <a href="mailto:contact@universalaillc.com">contact@universalaillc.com</a>. Supabase, Resend, Apple and
+          RevenueCat may retain service logs, purchase records or backups under their own policies; deleting an account does not promise immediate erasure of
+          those separate copies. Support messages remain in our business mailbox while needed to answer requests or keep necessary business records; contact us
+          to request deletion.
         </p>
       </section>
     </main>
