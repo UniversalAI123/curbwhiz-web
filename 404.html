@@ -20,6 +20,17 @@
       a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 12px; border: 1px solid #263040; color: #edf2f7; text-decoration: none; font-weight: 600; }
       a.primary { border: 0; color: #021417; background: linear-gradient(90deg, #5ce1f2, #38bdf8 55%, #8b7cf6); }
       a:focus-visible { outline: 2px solid #5ce1f2; outline-offset: 3px; }
+      /* Matches the home page: a soft aurora, and the card rises in once. CSS only. */
+      html { background: radial-gradient(60% 50% at 70% 10%, rgba(92, 225, 242, 0.12), transparent 70%), radial-gradient(50% 45% at 20% 90%, rgba(139, 124, 246, 0.14), transparent 70%), #05070a; min-height: 100%; }
+      main { animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; box-shadow: 0 40px 100px -50px rgba(92, 225, 242, 0.45); }
+      main > * { animation: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
+      h1 { animation-delay: 0.12s; } p { animation-delay: 0.18s; } nav { animation-delay: 0.24s; }
+      a { transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s, background 0.25s; }
+      a:hover { transform: translateY(-2px); border-color: #3a4658; }
+      a:active { transform: scale(0.98); }
+      ::selection { background: rgba(92, 225, 242, 0.3); color: #fff; }
+      @keyframes rise { from { opacity: 0; transform: translateY(14px); } }
+      @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
     </style>
   </head>
   <body>

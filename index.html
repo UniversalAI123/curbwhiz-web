@@ -10,7 +10,7 @@
       labelled as such. Prices and free-tier wording mirror support.html and the App Store listing:
       edit them together.
     -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'sha256-GGlhl+CBUuMHrTE2oq5E/I7PR1daJO44IWOu/AMe91k='; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'sha256-75PxO8bw8Y6YQCdMh71GYytgRU4RwUMzKzEqSWx8H1E='; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content="#05070a" />
@@ -374,11 +374,167 @@
         .js .reveal { opacity: 1; transform: none; }
         .js .cases .track i { transform: none; }
       }
+
+      /* ================= motion and finish (November 2026) =================
+         Additive polish. Only transform, opacity, filter and custom properties move
+         (the FAQ's height is the one exception, and only where the browser can
+         interpolate it). Everything below is static under prefers-reduced-motion and
+         with JavaScript off: hidden start states are gated by html.js. */
+      @property --ang { syntax: '<angle>'; inherits: false; initial-value: 140deg; }
+
+      html { scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.2) var(--bg); }
+      ::selection { color: #fff; }
+      h3 { text-wrap: balance; }
+      .hero .lede, .sec-head p, .card p, .faq p, .closing p { text-wrap: pretty; }
+      summary:focus-visible { border-radius: 18px; }
+
+      /* ---- load: the nav drops in, the hero rises and sharpens ---- */
+      .nav .brand, .nav-links > * { animation: drop 0.6s var(--ease) both; }
+      .nav-links > :nth-child(1) { animation-delay: 0.05s; }
+      .nav-links > :nth-child(2) { animation-delay: 0.09s; }
+      .nav-links > :nth-child(3) { animation-delay: 0.13s; }
+      .nav-links > :nth-child(4) { animation-delay: 0.17s; }
+      .nav-links > :nth-child(5) { animation-delay: 0.21s; }
+      @keyframes drop { from { opacity: 0; transform: translateY(-10px); } }
+      .js .hero .reveal:not(.stage) { filter: blur(8px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease), filter 0.7s var(--ease); transition-delay: var(--d, 0s); }
+      .js .hero .reveal.in:not(.stage) { filter: none; }
+      .js .hero .stage.reveal { transition-duration: 0.85s; }
+      .eyebrow::before { transform-origin: left; }
+      .js .reveal.eyebrow::before { transform: scaleX(0); transition: transform 0.7s var(--ease) calc(var(--d, 0s) + 0.25s); }
+      .js .reveal.eyebrow.in::before { transform: none; }
+
+      /* ---- ambient: two slow aurora glows behind the hero ---- */
+      .aur { position: absolute; border-radius: 50%; will-change: transform; }
+      .aur.a1 { width: 760px; height: 760px; right: 6%; top: -180px; background: radial-gradient(closest-side, rgba(92, 225, 242, 0.13), transparent); animation: drift-a 32s ease-in-out infinite alternate; }
+      .aur.a2 { width: 680px; height: 680px; right: -200px; top: 320px; background: radial-gradient(closest-side, rgba(139, 124, 246, 0.17), transparent); animation: drift-b 40s ease-in-out infinite alternate; }
+      @keyframes drift-a { from { transform: translate3d(0, 0, 0) scale(1); opacity: 0.7; } to { transform: translate3d(-150px, 70px, 0) scale(1.14); opacity: 1; } }
+      @keyframes drift-b { from { transform: translate3d(0, 0, 0) scale(1.06); opacity: 1; } to { transform: translate3d(-190px, -100px, 0) scale(0.9); opacity: 0.7; } }
+
+      /* ---- the status dot in the nav breathes ---- */
+      .nav-chip i { position: relative; }
+      .nav-chip i::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 1px solid var(--ice); opacity: 0; animation: ping 3.4s ease-out 1.2s infinite; }
+      @keyframes ping { 0% { transform: scale(0.5); opacity: 0.7; } 70%, 100% { transform: scale(1.7); opacity: 0; } }
+
+      /* ---- scroll: progress line under the nav, depth on the hero stage ---- */
+      .progress { display: none; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--grad); transform: scaleX(0); transform-origin: 0 50%; pointer-events: none; }
+      @keyframes grow { to { transform: scaleX(1); } }
+      @keyframes par-phone { to { translate: 0 -44px; } }
+      @keyframes par-r1 { to { translate: 0 -92px; } }
+      @keyframes par-r2 { to { translate: 0 -16px; } }
+      @keyframes par-dial { to { translate: 0 28px; } }
+      @supports (animation-timeline: scroll()) {
+        .progress { display: block; animation: grow linear both; animation-timeline: scroll(root block); }
+        @media (min-width: 1021px) {
+          .stage .phone { animation: float 7s ease-in-out infinite, par-phone linear both; animation-timeline: auto, scroll(root block); animation-range: normal, 0px 900px; }
+          .readout.r1 { animation: bob 6s ease-in-out 0.4s infinite, par-r1 linear both; animation-timeline: auto, scroll(root block); animation-range: normal, 0px 900px; }
+          .readout.r2 { animation: bob 6.5s ease-in-out 1.2s infinite, par-r2 linear both; animation-timeline: auto, scroll(root block); animation-range: normal, 0px 900px; }
+          .dial { animation: par-dial linear both; animation-timeline: scroll(root block); animation-range: 0px 900px; }
+        }
+      }
+
+      /* ---- reveals: children of a revealed group arrive one after another ---- */
+      .js .limits.reveal li, .js .faq.reveal details, .js .gallery.reveal .shot { opacity: 0; }
+      .js .limits.reveal.in li, .js .faq.reveal.in details, .js .gallery.reveal.in .shot { animation: rise 0.7s var(--ease) both; }
+      .js :is(.limits, .faq, .gallery).reveal.in > :nth-child(2) { animation-delay: 0.07s; }
+      .js :is(.limits, .faq, .gallery).reveal.in > :nth-child(3) { animation-delay: 0.14s; }
+      .js :is(.limits, .faq, .gallery).reveal.in > :nth-child(4) { animation-delay: 0.21s; }
+      .js :is(.limits, .faq, .gallery).reveal.in > :nth-child(5) { animation-delay: 0.28s; }
+      .js :is(.limits, .faq, .gallery).reveal.in > :nth-child(6) { animation-delay: 0.35s; }
+      @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+
+      /* ---- the little charts draw themselves when their card arrives ---- */
+      .ladder .bar, .meter i { transform-origin: left; }
+      .steps-viz i { transform-origin: bottom; }
+      .js .card.reveal .ladder .bar, .js .card.reveal .meter i { transform: scaleX(0); transition: transform 1s var(--ease) 0.35s; }
+      .js .card.reveal .ladder .margin { transition-delay: 0.6s; }
+      .js .card.reveal .ladder .pin, .js .card.reveal .meter em { opacity: 0; transition: opacity 0.6s var(--ease) 0.9s; }
+      .js .card.reveal .ladder .p-bid { transition-delay: 1.05s; }
+      .js .card.reveal .ladder .p-res { transition-delay: 1.2s; }
+      .js .card.reveal .steps-viz i { transform: scaleY(0); transition: transform 0.8s var(--ease); transition-delay: calc(0.25s + var(--n, 0) * 0.05s); }
+      .steps-viz i:nth-child(2) { --n: 1; } .steps-viz i:nth-child(3) { --n: 2; } .steps-viz i:nth-child(4) { --n: 3; }
+      .steps-viz i:nth-child(5) { --n: 4; } .steps-viz i:nth-child(6) { --n: 5; } .steps-viz i:nth-child(7) { --n: 6; } .steps-viz i:nth-child(8) { --n: 7; }
+      .js .card.reveal.in .ladder .bar, .js .card.reveal.in .meter i, .js .card.reveal.in .steps-viz i { transform: none; }
+      .js .card.reveal.in .ladder .pin, .js .card.reveal.in .meter em { opacity: 1; }
+
+      /* ---- buttons: sheen on hover, a small press ---- */
+      .btn { position: relative; overflow: hidden; }
+      .btn::after { content: ''; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 36%, rgba(255, 255, 255, 0.4) 50%, transparent 64%); transform: translateX(-130%); pointer-events: none; }
+      .btn-ghost::after { opacity: 0.3; }
+      .btn:active { transform: translateY(0) scale(0.98); transition-duration: 0.1s; }
+      .brand svg { transition: transform 0.45s var(--ease); }
+
+      /* ---- once an element has arrived ("rest"), it answers the pointer at its own pace ---- */
+      .js .card.rest { transition: transform 0.4s var(--ease), border-color 0.3s, box-shadow 0.4s; }
+      .js .plan.rest { transition: transform 0.4s var(--ease), box-shadow 0.4s; }
+      .js .how li.rest { transition: border-color 0.3s, background 0.3s, transform 0.4s var(--ease); }
+      .js .btn.rest { transition: transform 0.25s var(--ease), box-shadow 0.25s, background 0.25s, border-color 0.25s; }
+      .js .btn.rest:active { transform: scale(0.98); }
+      .plan { position: relative; }
+
+      @media (hover: hover) {
+        .btn:hover::after { transform: translateX(130%); transition: transform 0.9s var(--ease); }
+        .brand:hover svg { transform: rotate(-8deg) scale(1.05); }
+        .nav-links a { position: relative; }
+        .nav-links a::after { content: ''; position: absolute; left: 14px; right: 14px; bottom: 5px; height: 1.5px; border-radius: 2px; background: var(--grad); transform: scaleX(0); transform-origin: left; transition: transform 0.35s var(--ease); }
+        .nav-links a:hover { background: transparent; }
+        .nav-links a:hover::after, .nav-links a:focus-visible::after { transform: scaleX(1); }
+        .js .card.rest:hover { transform: translateY(-4px); }
+        .js .plan.rest:hover { transform: translateY(-3px); }
+        .js .how li.rest:hover { transform: translateX(4px); }
+        .js .btn-ghost.rest:hover { transform: translateY(-2px); }
+        .how li::before { transition: box-shadow 0.3s, border-color 0.3s; }
+        .how li:hover::before { border-color: rgba(92, 225, 242, 0.6); box-shadow: 0 0 22px -4px rgba(92, 225, 242, 0.55); }
+      }
+
+      /* ---- fine pointers only: a spotlight that follows the cursor, and a tilting hero phone ---- */
+      @media (hover: hover) and (pointer: fine) {
+        .card::before, .plan::before { content: ''; position: absolute; inset: 0; z-index: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity 0.4s; background: radial-gradient(440px circle at var(--mx, 50%) var(--my, 0%), rgba(92, 225, 242, 0.1), transparent 62%); }
+        .card:hover::before, .plan:hover::before { opacity: 1; }
+        .card > *, .plan > * { position: relative; z-index: 1; }
+      }
+      @media (hover: hover) and (pointer: fine) and (min-width: 1021px) {
+        .stage { perspective: 1400px; }
+        .stage .phone { transition: rotate 0.6s var(--ease); }
+      }
+
+      /* ---- a slow light travels round the Pro card and the closing box ---- */
+      .ang .plan.pro { background: linear-gradient(var(--surface-2), var(--surface-2)) padding-box, conic-gradient(from var(--ang), rgba(92, 225, 242, 0.85), rgba(139, 124, 246, 0.65) 20%, rgba(255, 255, 255, 0.07) 42%, rgba(255, 255, 255, 0.07) 64%, rgba(56, 189, 248, 0.5) 84%, rgba(92, 225, 242, 0.85)) border-box; animation: orbit 14s linear infinite; }
+      .ang .closing .box { border-color: transparent; background: radial-gradient(60% 90% at 50% 0%, rgba(92, 225, 242, 0.2), transparent 70%) padding-box, radial-gradient(50% 80% at 85% 100%, rgba(139, 124, 246, 0.24), transparent 70%) padding-box, linear-gradient(var(--surface), var(--surface)) padding-box, conic-gradient(from var(--ang), rgba(92, 225, 242, 0.7), rgba(255, 255, 255, 0.1) 22%, rgba(255, 255, 255, 0.1) 48%, rgba(139, 124, 246, 0.7) 68%, rgba(255, 255, 255, 0.1) 86%, rgba(92, 225, 242, 0.7)) border-box; animation: orbit 20s linear infinite; }
+      @keyframes orbit { to { --ang: 500deg; } }
+
+      /* ---- questions open and close smoothly where the browser can animate to "auto" ---- */
+      @supports (interpolate-size: allow-keywords) {
+        :root { interpolate-size: allow-keywords; }
+        .faq details::details-content { block-size: 0; opacity: 0; overflow: clip; transition: block-size 0.45s var(--ease), opacity 0.35s ease, content-visibility 0.45s allow-discrete; }
+        .faq details[open]::details-content { block-size: auto; opacity: 1; }
+      }
+
+      /* ---- the screen gallery fades out at its edges ---- */
+      .gallery { -webkit-mask-image: linear-gradient(90deg, transparent, #000 var(--pad), #000 calc(100% - var(--pad)), transparent); mask-image: linear-gradient(90deg, transparent, #000 var(--pad), #000 calc(100% - var(--pad)), transparent); }
+
+      @media (max-width: 760px) {
+        .nav.is-stuck { -webkit-backdrop-filter: saturate(140%) blur(12px); backdrop-filter: saturate(140%) blur(12px); }
+        .readout { -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+        .js .hero .reveal:not(.stage) { filter: none; }
+        .aur.a1 { width: 520px; height: 520px; right: -140px; top: -120px; }
+        .aur.a2 { display: none; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .js .hero .reveal:not(.stage) { filter: none; }
+        .js .reveal.eyebrow::before { transform: none; }
+        .js .limits.reveal li, .js .faq.reveal details, .js .gallery.reveal .shot { opacity: 1; }
+        .js .card.reveal .ladder .bar, .js .card.reveal .meter i, .js .card.reveal .steps-viz i { transform: none; }
+        .js .card.reveal .ladder .pin, .js .card.reveal .meter em { opacity: 1; }
+        .progress { display: none; }
+        .nav-chip i::after { display: none; }
+        .faq details::details-content { transition: none; }
+        .stage .phone { rotate: none !important; }
+      }
     </style>
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
-    <div class="ground" aria-hidden="true"></div>
+    <div class="ground" aria-hidden="true"><i class="aur a1"></i><i class="aur a2"></i></div>
 
     <header class="nav" id="nav">
       <div class="wrap">
@@ -401,6 +557,7 @@
           <span class="nav-chip"><i aria-hidden="true"></i>iPhone app · coming soon</span>
         </nav>
       </div>
+      <span class="progress" aria-hidden="true"></span>
     </header>
 
     <main id="main">
@@ -811,6 +968,6 @@
       </div>
     </footer>
 
-    <script>(function(){var d=document,h=d.documentElement;h.classList.add('js');var n=d.getElementById('nav');function s(){n.classList.toggle('is-stuck',window.scrollY>12)}s();window.addEventListener('scroll',s,{passive:true});var r=d.querySelectorAll('.reveal');if(!('IntersectionObserver'in window)){r.forEach(function(e){e.classList.add('in')});return}var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -8% 0px',threshold:0.08});r.forEach(function(e){io.observe(e)});var c=d.querySelector('[data-count]');if(c&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){var t=+c.getAttribute('data-count'),t0=null;c.textContent='0';requestAnimationFrame(function f(ts){if(!t0)t0=ts+350;var p=Math.min(1,Math.max(0,(ts-t0)/1300));p=1-Math.pow(1-p,4);c.textContent=Math.round(t*p).toLocaleString('en-US');if(p<1)requestAnimationFrame(f)})}})();</script>
+    <script>(function(){var d=document,h=d.documentElement,w=window;h.classList.add('js');if(w.CSS&&CSS.registerProperty)h.classList.add('ang');var n=d.getElementById('nav');function s(){n.classList.toggle('is-stuck',w.scrollY>12)}s();w.addEventListener('scroll',s,{passive:true});var rm=w.matchMedia('(prefers-reduced-motion: reduce)').matches;if(w.matchMedia('(hover: hover) and (pointer: fine)').matches){d.addEventListener('pointermove',function(e){var c=e.target&&e.target.closest&&e.target.closest('.card,.plan');if(!c)return;var b=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-b.left).toFixed(0)+'px');c.style.setProperty('--my',(e.clientY-b.top).toFixed(0)+'px')},{passive:true});var st=d.querySelector('.stage'),ph=st&&st.querySelector('.phone');if(ph&&!rm&&w.matchMedia('(min-width: 1021px)').matches){var q=0;st.addEventListener('pointermove',function(e){if(q)return;q=requestAnimationFrame(function(){q=0;var b=st.getBoundingClientRect(),x=(e.clientX-b.left)/b.width*2-1,y=(e.clientY-b.top)/b.height*2-1,rx=-y*4,ry=x*5;ph.style.rotate=rx.toFixed(2)+' '+ry.toFixed(2)+' 0 '+Math.sqrt(rx*rx+ry*ry).toFixed(2)+'deg'})},{passive:true});st.addEventListener('pointerleave',function(){if(q){cancelAnimationFrame(q);q=0}ph.style.rotate=''})}}var r=d.querySelectorAll('.reveal');function show(e){e.classList.add('in');setTimeout(function(){e.classList.add('rest')},1500)}if(!('IntersectionObserver'in w)){r.forEach(show);return}var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){show(e.target);io.unobserve(e.target)}})},{rootMargin:'0px 0px -8% 0px',threshold:0.08});r.forEach(function(e){io.observe(e)});var c=d.querySelector('[data-count]');if(c&&!rm){var t=+c.getAttribute('data-count'),t0=null;c.textContent='0';requestAnimationFrame(function f(ts){if(!t0)t0=ts+350;var p=Math.min(1,Math.max(0,(ts-t0)/1300));p=1-Math.pow(1-p,4);c.textContent=Math.round(t*p).toLocaleString('en-US');if(p<1)requestAnimationFrame(f)})}})();</script>
   </body>
 </html>
