@@ -106,6 +106,8 @@
       .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 22px 56px -14px rgba(92, 225, 242, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.45); }
       .btn-ghost { border: 1px solid var(--line-strong); background: rgba(255, 255, 255, 0.03); color: var(--text); }
       .btn-ghost:hover { background: rgba(255, 255, 255, 0.07); border-color: rgba(255, 255, 255, 0.24); transform: translateY(-2px); }
+      .nav-chip { display: inline-flex; align-items: center; gap: 9px; min-height: 36px; margin-left: 8px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line-strong); background: rgba(255, 255, 255, 0.03); font-size: 13px; color: var(--muted); white-space: nowrap; }
+      .nav-chip i { width: 7px; height: 7px; border-radius: 50%; background: var(--ice); box-shadow: 0 0 10px var(--ice); }
       .btn-sm { min-height: 44px; padding: 0 18px; font-size: 15px; border-radius: 12px; }
       .store { display: inline-flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 20px 0 16px; border-radius: 14px; border: 1px solid var(--line-strong); background: rgba(255, 255, 255, 0.03); }
       .store svg { width: 24px; height: 24px; }
@@ -395,7 +397,7 @@
           <a href="#how">How it works</a>
           <a href="#pricing">Pricing</a>
           <a href="../support.html">Support</a>
-          <a class="btn btn-ghost btn-sm" href="../">Open the web app</a>
+          <span class="nav-chip"><i aria-hidden="true"></i>iPhone app · coming soon</span>
         </nav>
       </div>
     </header>
@@ -411,8 +413,8 @@
               CurbWhiz works out the most you can pay for a car — buyer fees, repairs, transport and your profit target counted — so you walk in with <strong>a ceiling, not a guess</strong>.
             </p>
             <div class="cta-row reveal" style="--d: 0.18s">
-              <a class="btn btn-primary" href="../">
-                Try it in your browser
+              <a class="btn btn-primary" href="#how">
+                See how it works
                 <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
               </a>
               <span class="store" role="img" aria-label="iPhone app coming soon to the App Store">
@@ -710,7 +712,6 @@
                 <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>Exporting or erasing your data</li>
               </ul>
               <p class="fine">Backing up, restoring and deleting are always free.</p>
-              <a class="btn btn-ghost" style="margin-top: 20px" href="../">Try it in your browser</a>
             </article>
             <article class="plan pro reveal" style="--d: 0.08s">
               <h3>CurbWhiz Pro</h3>
@@ -774,10 +775,10 @@
             <h2>Walk in with <span class="grad-text">a number.</span></h2>
             <p>Run your next car through CurbWhiz before you raise a hand or shake one.</p>
             <div class="cta-row">
-              <a class="btn btn-primary" href="../">
-                Try it in your browser
-                <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-              </a>
+              <span class="store" role="img" aria-label="iPhone app coming soon to the App Store">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.05 12.54c-.03-2.76 2.25-4.09 2.36-4.15-1.29-1.88-3.29-2.14-4-2.17-1.7-.17-3.32 1-4.18 1-.86 0-2.19-.98-3.6-.95-1.85.03-3.56 1.08-4.51 2.73-1.92 3.33-.49 8.26 1.38 10.97.92 1.32 2.01 2.81 3.44 2.76 1.38-.06 1.9-.89 3.57-.89 1.67 0 2.14.89 3.6.86 1.49-.03 2.43-1.35 3.34-2.68 1.05-1.54 1.48-3.03 1.51-3.11-.03-.01-2.89-1.11-2.91-4.37zM14.3 4.43c.76-.92 1.27-2.2 1.13-3.47-1.09.04-2.42.73-3.2 1.65-.7.81-1.32 2.11-1.15 3.36 1.22.09 2.46-.62 3.22-1.54z" /></svg>
+                <span><small>iPhone app · coming soon to the</small><b>App Store</b></span>
+              </span>
               <a class="btn btn-ghost" href="../support.html">Read the support guide</a>
             </div>
           </div>
@@ -801,7 +802,6 @@
           <p>CurbWhiz is a calculator and a checklist — not financial, legal or tax advice. © 2026 Universal AI LLC.</p>
         </div>
         <nav aria-label="Footer">
-          <a href="../">Web app</a>
           <a href="../support.html">Support</a>
           <a href="../privacy.html">Privacy</a>
           <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" rel="noopener">Terms of Use</a>
